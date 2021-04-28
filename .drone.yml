@@ -18,7 +18,8 @@ steps:
   image: spritsail/docker-test
   settings:
     run: |
-      curl --version &&
+      busybox && \
+      curl --version && \
       xmlstarlet --version
 
 - name: test
@@ -38,19 +39,15 @@ steps:
   settings:
     repo: spritsail/plex-media-server
     tags:
-    - plexpass
-    - "%label io.spritsail.version.plex | %prefix plexpass | %remsuf [0-9a-f]+$ | %auto 2"
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+    - musl
+    login: {from_secret: docker_login}
   when:
     branch:
-    - pass
+    - musl
     event:
     - push
 ---
 kind: signature
-hmac: d7ad7e2102295415a2f975e1cb216c712d3b7fd78b11bd48020eb8f464a13b88
+hmac: df99f77b504a0a59d479cf31ba802901c6a106e4dc6085fc6273466108672d46
 
 ...
