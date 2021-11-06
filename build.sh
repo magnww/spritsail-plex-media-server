@@ -1,3 +1,4 @@
+DOCKER_REGISTY=lostos/spritsail-plex-media-server
 ARGS=$(curl -s https://raw.githubusercontent.com/spritsail/plex-media-server/master/Dockerfile | grep ARG)
 PLEX_VER=$(echo "$ARGS" | grep "PLEX_VER=" | cut -d '=' -f 2)
 echo PLEX_VER=$PLEX_VER
@@ -20,6 +21,12 @@ echo OPENSSL_VER=$OPENSSL_VER
 CURL_VER=$(echo "$ARGS" | grep "CURL_VER=" | cut -d '=' -f 2)
 echo CURL_VER=$CURL_VER
 
+echo "check update..."
+if [ "" != "$(curl -s https://registry.hub.docker.com/v1/repositories/$DOCKER_REGISTY/tags | grep \\\"$PLEX_VER\\\")" ]; then
+  echo "no update."
+  exit
+fi
+
 docker buildx build \
   --push \
   --build-arg PLEX_VER=$PLEX_VER \
@@ -32,7 +39,7 @@ docker buildx build \
   --build-arg XMLSTAR_VER=$XMLSTAR_VER \
   --build-arg OPENSSL_VER=$OPENSSL_VER \
   --build-arg CURL_VER=$CURL_VER \
-  --tag lostos/spritsail-plex-media-server:latest \
-  --tag lostos/spritsail-plex-media-server:$PLEX_VER \
+  --tag $DOCKER_REGISTY:latest \
+  --tag $DOCKER_REGISTY:$PLEX_VER \
   .
 docker image prune -f
