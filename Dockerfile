@@ -64,9 +64,6 @@ RUN curl -fsSL -o plexmediaserver.deb https://downloads.plex.tv/plex-media-serve
        lib/libcurl.so* \
        lib/libssl.so* \
        lib/libnghttp2.so* \
-       lib/libxml2.so* \
-       lib/libxslt.so* \
-       lib/libexslt.so* \
        lib/plexmediaserver.* \
        etc/ld-musl-x86_64.path \
        Resources/start.sh \
